@@ -7,3 +7,5 @@ public class SecurityConstants {
     public static final String HEADER_STRING = "Authorization";
     public static final String SIGN_UP_URL = "/users/sign-up";
 }
+
+// TODO: RSA for JWT
