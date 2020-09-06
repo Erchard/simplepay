@@ -8,8 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.http.converter.json.GsonFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.simplepay.paysystem")
 public class PaysystemApplication {
 
     public static void main(String[] args) {
@@ -27,5 +28,10 @@ public class PaysystemApplication {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    RestTemplate getRestTemplate(){
+        return new RestTemplate();
     }
 }
