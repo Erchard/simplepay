@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountService {
@@ -43,7 +46,7 @@ public class AccountService {
     }
 
     @Transactional
-    boolean transfer(String numberFrom, String numberTo, BigDecimal amount) {
+    boolean simpleTransfer(String numberFrom, String numberTo, BigDecimal amount) {
         Account accountFrom = getByNumber(numberFrom);
         Account accountTo = getByNumber(numberTo);
         if (accountFrom.getBalance().add(accountFrom.getCreditLimit()).compareTo(amount) < 0) {
@@ -57,6 +60,38 @@ public class AccountService {
         return true;
     }
 
-//TODO: transfer with multiple inputs and outputs
+    @Transactional
+    public boolean transfer(Map<String, BigDecimal> inputList, Map<String, BigDecimal> outputList) {
+        BigDecimal inputTotal = BigDecimal.ZERO;
+        BigDecimal outputTotal = BigDecimal.ZERO;
+        List<Account> accountList = new ArrayList<>();
+        Account account;
+        BigDecimal balance;
+        BigDecimal amount;
+        for (Map.Entry<String, BigDecimal> input : inputList.entrySet()) {
+            amount = input.getValue();
+            account = getByNumber(input.getKey());
+            balance = account.getBalance();
+            if (balance.add(account.getCreditLimit()).compareTo(amount) < 0) {
+                logger.error("The transfer amount is too large. Not enough money to transfer between accounts.");
+                return false;
+            }
+            account.setBalance(balance.add(amount));
+            accountList.add(account);
+            inputTotal = inputTotal.add(amount);
+        }
+        for (Map.Entry<String, BigDecimal> output : outputList.entrySet()) {
+            account = getByNumber(output.getKey());
+            account.setBalance(account.getBalance().add(output.getValue()));
+            outputTotal = outputTotal.add(output.getValue());
+        }
+        if (outputTotal.compareTo(inputTotal) != 0) {
+            throw new IllegalArgumentException("Inputs total not equal outputs total");
+        }
+        accountRepository.saveAll(accountList);
+        return true;
+    }
+
+
 
 }
