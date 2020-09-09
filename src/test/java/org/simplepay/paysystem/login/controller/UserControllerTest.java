@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
-import java.net.URLDecoder;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

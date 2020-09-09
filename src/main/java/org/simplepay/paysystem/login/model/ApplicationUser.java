@@ -1,9 +1,9 @@
 package org.simplepay.paysystem.login.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class ApplicationUser implements Serializable {
@@ -13,6 +13,9 @@ public class ApplicationUser implements Serializable {
     Long id;
     String username;
     String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<ApplicationRole> roles;
 
     public Long getId() {
         return id;
@@ -38,4 +41,11 @@ public class ApplicationUser implements Serializable {
         this.password = password;
     }
 
+    public Set<ApplicationRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<ApplicationRole> roles) {
+        this.roles = roles;
+    }
 }
