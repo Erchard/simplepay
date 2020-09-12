@@ -22,6 +22,8 @@ class AccountServiceTest {
     @Autowired
     AccountService accountService;
 
+    final String currencyId = "USD";
+
     final String ExternalPaySystemA = "00000A";
     final String ExternalPaySystemB = "00000B";
     final String AccountA = "000001";
@@ -41,7 +43,7 @@ class AccountServiceTest {
     @Test
     void createNewAccount() {
 
-        Account account = accountService.createNewAccount(AccountA);
+        Account account = accountService.createNewAccount(currencyId, AccountA);
         logger.info("Account Id: {}", account.getId());
         assertEquals(account.getNumber(), AccountA);
     }
@@ -49,7 +51,7 @@ class AccountServiceTest {
 
     @Test
     void changeCreditLimit() {
-        accountService.createNewAccount(AccountC);
+        accountService.createNewAccount(currencyId, AccountC);
         accountService.changeCreditLimit(AccountC, BigDecimal.TEN);
         Account account = accountService.getByNumber(AccountC);
         assertEquals(account.getCreditLimit().compareTo(BigDecimal.TEN), 0);
@@ -60,22 +62,22 @@ class AccountServiceTest {
         Map<String, BigDecimal> inputs = new HashMap<>();
         Map<String, BigDecimal> outputs = new HashMap<>();
 
-        accountService.createNewAccount(AccountB);
+        accountService.createNewAccount(currencyId, AccountB);
         accountService.changeCreditLimit(AccountB, BigDecimal.TEN);
         inputs.put(AccountB, new BigDecimal("3.15"));
 
-        accountService.createNewAccount(AccountD);
+        accountService.createNewAccount(currencyId, AccountD);
         accountService.changeCreditLimit(AccountD, BigDecimal.TEN);
         inputs.put(AccountD, new BigDecimal("7.20"));
 
 
-        accountService.createNewAccount(AccountE);
+        accountService.createNewAccount(currencyId, AccountE);
         outputs.put(AccountE,new BigDecimal("1.00"));
 
-        accountService.createNewAccount(AccountF);
+        accountService.createNewAccount(currencyId, AccountF);
         outputs.put(AccountF,new BigDecimal("5.00"));
 
-        accountService.createNewAccount(AccountG);
+        accountService.createNewAccount(currencyId, AccountG);
         outputs.put(AccountG,new BigDecimal("4.35"));
 
         accountService.transfer(inputs,outputs);

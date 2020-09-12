@@ -21,9 +21,10 @@ public class AccountService {
     @Autowired
     AccountRepository accountRepository;
 
-    Account createNewAccount(String number) {
+    Account createNewAccount(String currencyId, String number) {
         Account account = new Account();
         account.setBalance(BigDecimal.ZERO);
+        account.setCurrencyId(currencyId);
         account.setNumber(number);
         account.setCreditLimit(BigDecimal.ZERO);
         accountRepository.save(account);
@@ -49,6 +50,11 @@ public class AccountService {
     boolean simpleTransfer(String numberFrom, String numberTo, BigDecimal amount) {
         Account accountFrom = getByNumber(numberFrom);
         Account accountTo = getByNumber(numberTo);
+        if(!accountFrom.getCurrencyId().equals(accountTo.getCurrencyId())){
+            logger.error("Currency of accounts is not equal");
+            return false;
+        }
+
         if (accountFrom.getBalance().add(accountFrom.getCreditLimit()).compareTo(amount) < 0) {
             logger.error("The transfer amount is too large. Not enough money to transfer between accounts.");
             return false;
@@ -68,9 +74,17 @@ public class AccountService {
         Account account;
         BigDecimal balance;
         BigDecimal amount;
+        String currencyId = null;
         for (Map.Entry<String, BigDecimal> input : inputList.entrySet()) {
             amount = input.getValue();
             account = getByNumber(input.getKey());
+            if(currencyId==null){
+                currencyId = account.getCurrencyId();
+            }
+            if(!currencyId.equals(account.getCurrencyId())){
+                logger.error("Currency of accounts is not equal");
+                return false;
+            }
             balance = account.getBalance();
             if (balance.add(account.getCreditLimit()).compareTo(amount) < 0) {
                 logger.error("The transfer amount is too large. Not enough money to transfer between accounts.");

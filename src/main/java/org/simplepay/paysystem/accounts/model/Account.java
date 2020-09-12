@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class Account {
     @Id @GeneratedValue
     Long id;
+    String currencyId;
     @Column(unique = true)
     String number;
     @Column(nullable= false, precision=20, scale=10)
@@ -28,6 +29,14 @@ public class Account {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(String currencyId) {
+        this.currencyId = currencyId;
     }
 
     public String getNumber() {
