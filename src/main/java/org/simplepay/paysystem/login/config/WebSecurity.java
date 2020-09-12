@@ -3,7 +3,6 @@ package org.simplepay.paysystem.login.config;
 import org.simplepay.paysystem.login.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,8 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFilter;
-import org.springframework.security.web.server.authorization.AuthorizationWebFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -49,8 +46,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
 //                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+//                .anyRequest().authenticated()
+                .antMatchers("/api/**").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

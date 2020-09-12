@@ -28,9 +28,4 @@ public class UserController {
         applicationUserService.signUp(applicationUser);
     }
 
-    @GetMapping("/test")
-    String testMyData(Principal principal){
-        return gson.toJson(principal);
-    }
-
 }

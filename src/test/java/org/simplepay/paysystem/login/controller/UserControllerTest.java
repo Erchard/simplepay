@@ -1,10 +1,7 @@
 package org.simplepay.paysystem.login.controller;
 
 import com.google.gson.Gson;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.mockito.internal.matchers.Null;
 import org.simplepay.paysystem.login.model.ApplicationUser;
 import org.slf4j.Logger;
@@ -17,6 +14,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled("Start only run server")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
 
@@ -30,6 +28,7 @@ class UserControllerTest {
 
     static String token;
 
+
     @Test
     @Order(1)
     void testSignUp() {
@@ -41,6 +40,7 @@ class UserControllerTest {
 
 
     }
+
 
     @Test
     @Order(2)
@@ -55,6 +55,7 @@ class UserControllerTest {
         logger.info("Header: {}", token);
     }
 
+
     @Test
     @Order(3)
     void testController() {
@@ -68,7 +69,7 @@ class UserControllerTest {
 
         HttpEntity<Null> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<String> result = restTemplate.exchange("http://localhost:8080/users/test", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> result = restTemplate.exchange("http://localhost:8080/api/test", HttpMethod.GET, entity, String.class);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         logger.info(result.getBody());
     }
