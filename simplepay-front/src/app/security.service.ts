@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApplicationUser} from "./shared/applicationuser.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 
@@ -10,10 +10,12 @@ import {Observable, of} from "rxjs";
 export class SecurityService {
 
   private signupUrl = '/users/sign-up';
+  private loginUrl = '/login';
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
+  private authorization: string;
 
 
   constructor(private http: HttpClient) {
@@ -36,5 +38,20 @@ export class SecurityService {
 
       return of(result as T);
     };
+  }
+
+  getResponse(applicationuser: ApplicationUser): Observable<HttpResponse<ApplicationUser>> {
+    return this.http.post<ApplicationUser>(
+      this.loginUrl, applicationuser, {observe: 'response'});
+  }
+
+  logIn(applicationuser: ApplicationUser) {
+    console.log(applicationuser);
+    this.getResponse(applicationuser).subscribe(resp => {
+      console.log(resp);
+      this.authorization = resp.headers.get('authorization');
+      console.log(this.authorization);
+    });
+
   }
 }

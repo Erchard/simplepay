@@ -1,1 +1,12 @@
-<p>login-form works!</p>
+<h1>Log In</h1>
+<div>
+  <label>Username:
+    <input [(ngModel)]="applicationuser.username" />
+  </label>
+</div>
+<div>
+  <label>Password:
+    <input type="password" [(ngModel)]="applicationuser.password" />
+  </label>
+</div>
+<button (click)="logIn()">LogIn</button>

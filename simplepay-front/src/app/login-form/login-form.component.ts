@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ApplicationUser} from "../shared/applicationuser.model";
+import {SecurityService} from "../security.service";
 
 @Component({
   selector: 'app-login-form',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginFormComponent implements OnInit {
 
-  constructor() { }
+  applicationuser: ApplicationUser = {username: '', password: ''};
+
+  constructor(private securityService: SecurityService) {
+  }
 
   ngOnInit(): void {
   }
 
+  logIn() {
+    this.securityService.logIn(this.applicationuser);
+  }
 }
