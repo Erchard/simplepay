@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ApplicationUser} from "./shared/applicationuser.model";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-import {catchError} from "rxjs/operators";
-import {Observable, of} from "rxjs";
+import {catchError, map} from "rxjs/operators";
+import {Observable, of, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -45,13 +45,15 @@ export class SecurityService {
       this.loginUrl, applicationuser, {observe: 'response'});
   }
 
-  logIn(applicationuser: ApplicationUser) {
+  logIn(applicationuser: ApplicationUser): Observable<HttpResponse<ApplicationUser>> {
     console.log(applicationuser);
-    this.getResponse(applicationuser).subscribe(resp => {
-      console.log(resp);
-      this.authorization = resp.headers.get('authorization');
-      console.log(this.authorization);
-    });
-
+    return this.getResponse(applicationuser).pipe(
+      map(resp => {
+        console.log(resp);
+        this.authorization = resp.headers.get('authorization');
+        console.log(this.authorization);
+        return resp;
+      })
+    )
   }
 }

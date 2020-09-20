@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SecurityService} from "../security.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-form',
@@ -12,7 +13,8 @@ export class LoginFormComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(private securityService: SecurityService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -20,7 +22,11 @@ export class LoginFormComponent implements OnInit {
   }
 
   logIn() {
-    this.securityService.logIn(this.loginForm.value);
+    this.securityService.logIn(this.loginForm.value).subscribe(
+      () => {
+        this.router.navigate(['appuser/cabinet']);
+      }
+    );
   }
 
   private initForm(): void {
