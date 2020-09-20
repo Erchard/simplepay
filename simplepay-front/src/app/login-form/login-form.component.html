@@ -1,12 +1,14 @@
 <h1>Log In</h1>
+<form [formGroup]="loginForm" (ngSubmit)="logIn()">
 <div>
   <label>Username:
-    <input [(ngModel)]="applicationuser.username" />
+    <input type="text" formControlName="username"  />
   </label>
 </div>
 <div>
   <label>Password:
-    <input type="password" [(ngModel)]="applicationuser.password" />
+    <input type="password" formControlName="password" />
   </label>
 </div>
-<button (click)="logIn()">LogIn</button>
+<button type="submit">LogIn</button>
+</form>

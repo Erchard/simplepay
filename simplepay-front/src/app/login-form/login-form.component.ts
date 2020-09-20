@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {ApplicationUser} from "../shared/applicationuser.model";
+import {Component, OnInit} from '@angular/core';
 import {SecurityService} from "../security.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-login-form',
@@ -9,15 +9,24 @@ import {SecurityService} from "../security.service";
 })
 export class LoginFormComponent implements OnInit {
 
-  applicationuser: ApplicationUser = {username: '', password: ''};
+  loginForm: FormGroup;
 
-  constructor(private securityService: SecurityService) {
+  constructor(private securityService: SecurityService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
+    this.initForm();
   }
 
   logIn() {
-    this.securityService.logIn(this.applicationuser);
+    this.securityService.logIn(this.loginForm.value);
+  }
+
+  private initForm(): void {
+    this.loginForm = this.fb.group({
+      username: '',
+      password: ''
+    });
   }
 }

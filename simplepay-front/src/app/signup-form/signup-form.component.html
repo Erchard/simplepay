@@ -1,12 +1,14 @@
 <h1>Registration</h1>
-<div>
-  <label>Username:
-  <input [(ngModel)]="applicationuser.username" />
-  </label>
-</div>
-<div>
-  <label>Password:
-  <input type="password" [(ngModel)]="applicationuser.password" />
-  </label>
-</div>
-<button (click)="signUp()">SignUp</button>
+<form [formGroup]="signUpForm" (ngSubmit)="signUp()">
+  <div>
+    <label>Username:
+      <input type="text" formControlName="username"  />
+    </label>
+  </div>
+  <div>
+    <label>Password:
+      <input type="password" formControlName="password" />
+    </label>
+  </div>
+  <button type="submit">LogIn</button>
+</form>
