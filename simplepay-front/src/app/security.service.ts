@@ -3,6 +3,7 @@ import {ApplicationUser} from "./shared/applicationuser.model";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {catchError, map} from "rxjs/operators";
 import {Observable, of, Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class SecurityService {
   private authorization: string;
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private router: Router) {
   }
 
   signUp(applicationuser: ApplicationUser): void {
@@ -40,7 +42,7 @@ export class SecurityService {
     };
   }
 
-  getResponse(applicationuser: ApplicationUser): Observable<HttpResponse<ApplicationUser>> {
+  private getResponse(applicationuser: ApplicationUser): Observable<HttpResponse<ApplicationUser>> {
     return this.http.post<ApplicationUser>(
       this.loginUrl, applicationuser, {observe: 'response'});
   }
@@ -56,4 +58,11 @@ export class SecurityService {
       })
     )
   }
+
+  requireLogedIn():void{
+    if(!this.authorization || this.authorization.length == 0){
+      this.router.navigate(['appuser/login']);
+    }
+  }
+
 }
